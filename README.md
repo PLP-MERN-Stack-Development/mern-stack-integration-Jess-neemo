@@ -1,78 +1,72 @@
-# MERN Stack Integration Assignment
+# 🔄 Week 4: Deep Dive into MERN Stack Integration
 
-This assignment focuses on building a full-stack MERN (MongoDB, Express.js, React.js, Node.js) application that demonstrates seamless integration between front-end and back-end components.
+## 🚀 Project Overview
+A full-stack blog application built with the MERN stack demonstrating:
+- RESTful API with Express & MongoDB Atlas
+- JWT-based user authentication
+- Full CRUD for blog posts and categories
+- Comment system
+- Responsive React frontend with Vite
 
-## Assignment Overview
+## 🛠️ Setup Instructions
 
-You will build a blog application with the following features:
-1. RESTful API with Express.js and MongoDB
-2. React front-end with component architecture
-3. Full CRUD functionality for blog posts
-4. User authentication and authorization
-5. Advanced features like image uploads and comments
+### Prerequisites
+- Node.js v18+
+- MongoDB Atlas account
 
-## Project Structure
+### Installation
+1. Clone the repository
+2. **Backend**:
+   ```bash
+   cd server
+   npm install
+   cp .env.example .env  # Fill in MONGODB_URI and JWT_SECRET
+   npm run dev
 
-```
-mern-blog/
-├── client/                 # React front-end
-│   ├── public/             # Static files
-│   ├── src/                # React source code
-│   │   ├── components/     # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API services
-│   │   ├── context/        # React context providers
-│   │   └── App.jsx         # Main application component
-│   └── package.json        # Client dependencies
-├── server/                 # Express.js back-end
-│   ├── config/             # Configuration files
-│   ├── controllers/        # Route controllers
-│   ├── models/             # Mongoose models
-│   ├── routes/             # API routes
-│   ├── middleware/         # Custom middleware
-│   ├── utils/              # Utility functions
-│   ├── server.js           # Main server file
-│   └── package.json        # Server dependencies
-└── README.md               # Project documentation
-```
 
-## Getting Started
+   3. Frontend:
+       bash
+      cd client
+      npm install
+      npm run dev
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Follow the setup instructions in the `Week4-Assignment.md` file
-4. Complete the tasks outlined in the assignment
+      Environment Variables (server/.env)
+       env
+      MONGODB_URI=mongodb+srv://user:pass@cluster.xxxx.mongodb.net/mern-stack
+      JWT_SECRET=your_strong_random_secret_here
+      PORT=5000 
 
-## Files Included
+📡 API Endpoints
 
-- `Week4-Assignment.md`: Detailed assignment instructions
-- Starter code for both client and server:
-  - Basic project structure
-  - Configuration files
-  - Sample models and components
+Auth
+POST /api/auth/register – { name, email, password }
+POST /api/auth/login – { email, password }
 
-## Requirements
+Posts
+GET /api/posts – Get all posts
+GET /api/posts/:slug – Get single post
+POST /api/posts – Create post (protected)
+PUT /api/posts/:id – Update post (protected)
+DELETE /api/posts/:id – Delete post (protected)
+POST /api/posts/:postId/comments – Add comment (protected)
 
-- Node.js (v18 or higher)
-- MongoDB (local installation or Atlas account)
-- npm or yarn
-- Git
+Categories
+GET /api/categories
+POST /api/categories (protected)
 
-## Submission
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+✅ Features Implemented
+*Full MERN stack integration
+*MongoDB Atlas with IP whitelist (0.0.0.0/0 for dev)
+*JWT authentication with protected routes
+*Full CRUD operations
+*Comment system
+*Custom React hooks (usePosts)
+*Responsive UI with clean component architecture
 
-1. Complete both the client and server portions of the application
-2. Implement all required API endpoints
-3. Create the necessary React components and hooks
-4. Document your API and setup process in the README.md
-5. Include screenshots of your working application
 
-## Resources
+🖼️ Screenshots
 
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [Express.js Documentation](https://expressjs.com/)
-- [React Documentation](https://react.dev/)
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [Mongoose Documentation](https://mongoosejs.com/docs/) 
+![Homepage](screenshots/home.png)
+![Post Detail](screenshots/post-detail.png)
+

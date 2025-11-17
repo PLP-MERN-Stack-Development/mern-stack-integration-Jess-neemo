@@ -68,15 +68,24 @@ const PostSchema = new mongoose.Schema(
 
 // Create slug from title before saving
 PostSchema.pre('save', function (next) {
-  if (!this.isModified('title')) {
-    return next();
+  console.log('🔥 pre-save hook triggered');
+  console.log('Title:', this.title);
+  console.log('Slug before:', this.slug);
+
+  if (!this.title || typeof this.title !== 'string' || this.title.trim() === '') {
+    return next(new Error('Post title is required to generate slug'));
   }
-  
-  this.slug = this.title
-    .toLowerCase()
-    .replace(/[^\w ]+/g, '')
-    .replace(/ +/g, '-');
-    
+
+  if (!this.slug) {
+    this.slug = this.title
+      .trim()
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  console.log('Slug after:', this.slug);
   next();
 });
 
