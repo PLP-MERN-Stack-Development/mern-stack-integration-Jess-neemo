@@ -16,8 +16,24 @@ const authRoutes = require('./routes/auth');
 dotenv.config();
 
 // Initialize Express app
+// Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Fix for Render 502 errors: ensure keep-alive header
+app.use((req, res, next) => {
+  res.set('Connection', 'keep-alive');
+  next();
+});
+
+// Start server on 0.0.0.0 (required for Render)
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
+
+// Extend timeouts to prevent 502s on Render
+server.keepAliveTimeout = 120000; // 120 seconds
+server.headersTimeout = 125000;   // slightly higher than keepAliveTimeout
 
 // Middleware
 app.use(cors());
