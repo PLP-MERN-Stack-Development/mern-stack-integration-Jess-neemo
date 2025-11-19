@@ -7,33 +7,32 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Import routes
+// Load environment variables FIRST
+dotenv.config();
+
+// Add startup logs BEFORE anything else
+console.log('✅ Starting server...');
+console.log('✅ MONGODB_URI configured:', process.env.MONGODB_URI ? 'YES' : 'NO');
+console.log('✅ JWT_SECRET configured:', process.env.JWT_SECRET ? 'YES' : 'NO');
+
+// Validate critical env vars
+if (!process.env.MONGODB_URI) {
+  console.error('❌ FATAL: MONGODB_URI is missing in environment variables.');
+  process.exit(1);
+}
+if (!process.env.JWT_SECRET) {
+  console.error('❌ FATAL: JWT_SECRET is missing.');
+  process.exit(1);
+}
+
+// Import routes AFTER env is loaded
 const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const authRoutes = require('./routes/auth');
 
-// Load environment variables
-dotenv.config();
-
-// Initialize Express app
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// Fix for Render 502 errors: ensure keep-alive header
-app.use((req, res, next) => {
-  res.set('Connection', 'keep-alive');
-  next();
-});
-
-// Start server on 0.0.0.0 (required for Render)
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
-
-// Extend timeouts to prevent 502s on Render
-server.keepAliveTimeout = 120000; // 120 seconds
-server.headersTimeout = 125000;   // slightly higher than keepAliveTimeout
 
 // Middleware
 app.use(cors());
@@ -70,25 +69,30 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect to MongoDB and start server
+// Connect to MongoDB FIRST, THEN start server
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+    console.log('✅ Connected to MongoDB');
+
+    // Start server ONLY after DB is ready
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`✅ Server running on port ${PORT}`);
     });
+
+    // Keep-alive settings for cloud hosts (Railway/Render)
+    server.keepAliveTimeout = 120000; // 120 seconds
+    server.headersTimeout = 125000;   // slightly higher
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB', err);
+    console.error('❌ Failed to connect to MongoDB:', err.message);
     process.exit(1);
   });
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
-  // Close server & exit process
   process.exit(1);
 });
 
-module.exports = app; 
+module.exports = app;
