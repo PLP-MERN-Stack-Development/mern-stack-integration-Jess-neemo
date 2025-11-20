@@ -70,3 +70,7 @@ POST /api/categories (protected)
 ![Homepage](screenshots/home.png)
 ![Post Detail](screenshots/post-detail.png)
 
+
+🌐 Live Demo
+- **Frontend**: [https://mern-stack-integration-alpha.vercel.app](https://mern-stack-integration-alpha.vercel.app)
+- **Backend**: [https://mern-stack-integration-jess-neemo-production.up.railway.app](https://mern-stack-integration-jess-neemo-production.up.railway.app)
